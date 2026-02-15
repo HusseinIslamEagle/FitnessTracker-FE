@@ -1,16 +1,61 @@
-# React + Vite
+# 🏋️ Fitness Tracker Pro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern full-featured fitness web application built with React + Firebase.
 
-Currently, two official plugins are available:
+Designed for serious trainees who want structured programs, progress intelligence, and advanced workout tracking.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Live Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🔐 Authentication
+- Email & Password Login
+- Google Login
+- Display Name Management
+- Protected Premium Pages
 
-## Expanding the ESLint configuration
+### 🏠 Smart Home (User Mode)
+- Hero Section
+- Educational Fitness Cards
+- Motivational Strip
+- Packages Section
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 📊 Progress Intelligence System
+- Weight Tracking
+- Body Fat Tracking
+- Lean / Fat Mass Analysis
+- BMI Calculation
+- Goal Progress Bar
+- Smart Trend Analysis
+- Interactive Charts
+
+### 🏋️ Workouts Section
+6 Full Training Programs:
+- Anterior x Posterior (6 Days)
+- Arnold x Upper-Lower (5 Days)
+- 3-Day Mass Builder
+- Muscle Mommies
+- Push Pull Legs x Upper Lower
+- Elite Strength Formula
+
++ Cardio Section
+
+### 💎 Premium Fitness Tracker
+- Unlimited workout logging
+- Local persistence
+- Protected route (auth required)
+
+---
+
+## 🛠 Tech Stack
+
+- React (Vite)
+- Firebase Authentication
+- React Router
+- Recharts
+- Framer Motion
+- TailwindCSS
+- LocalStorage Persistence
+
+
+
