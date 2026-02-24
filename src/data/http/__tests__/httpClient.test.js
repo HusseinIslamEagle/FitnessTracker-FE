@@ -1,5 +1,6 @@
 // src/data/http/__tests__/httpClient.test.js
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+
 import { fetchJsonWithTimeout, fetchWithRetry } from "../httpClient";
 
 function makeResponse({ ok, status, jsonData, jsonThrows = false }) {

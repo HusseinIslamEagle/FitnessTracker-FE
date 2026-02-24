@@ -1,6 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+// ✅ 0) Mock local firebase module to avoid env dependency in tests
+vi.mock("../../firebase", () => ({
+  auth: {},
+  googleProvider: {},
+}));
 
 // ✅ 1) Mock firebase/app
 vi.mock("firebase/app", () => ({
