@@ -2,7 +2,9 @@ import DashboardHero from "../components/dashboard/DashboardHero";
 import StatsGrid from "../components/dashboard/StatsGrid";
 import ActivityChart from "../components/dashboard/ActivityChart";
 import Heatmap from "../components/dashboard/Heatmap";
-
+import MotivationStrip from "../components/dashboard/MotivationStrip";
+import ActivityTimeline from "../components/dashboard/ActivityTimeline";
+import AIInsights from "../components/dashboard/AIInsights";
 
 
 export default function Dashboard() {
@@ -22,7 +24,9 @@ export default function Dashboard() {
 
       <AIInsights workouts={workouts} />
 
-      
+      <MotivationStrip workouts={workouts} />
+
+      <ActivityTimeline workouts={workouts} />
 
     </div>
   );
