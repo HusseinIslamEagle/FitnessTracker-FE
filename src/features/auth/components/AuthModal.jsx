@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "@features/auth/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function AuthModal({ type = "signin", close }) {
   const navigate = useNavigate();

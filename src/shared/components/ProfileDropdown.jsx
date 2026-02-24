@@ -1,9 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
-
-import { useAuth } from "../../features/auth/context/AuthContext";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -19,8 +17,7 @@ function useIsMobile(breakpoint = 768) {
   return isMobile;
 }
 
-export default function ProfileDropdown() {
-  const { user, logout } = useAuth();
+export default function ProfileDropdown({ user, onLogout }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -36,7 +33,6 @@ export default function ProfileDropdown() {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!open) return;
-      // لو portal على الموبايل: هنقفل بالـ overlay أصلا، بس نسيبها أمان
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
 
@@ -65,16 +61,19 @@ export default function ProfileDropdown() {
   }, [open, isMobile]);
 
   const handleLogout = async () => {
-    await logout();
-    setOpen(false);
+    try {
+      await onLogout?.();
+    } finally {
+      setOpen(false);
 
-    // ✅ 1) Feedback page
-    navigate("/feedback", { replace: true });
+      // ✅ 1) Feedback page
+      navigate("/feedback", { replace: true });
 
-    // ✅ 2) Then Home
-    setTimeout(() => {
-      navigate("/", { replace: true });
-    }, 2000);
+      // ✅ 2) Then Home
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 2000);
+    }
   };
 
   // ✅ compute portal position (anchored to the button)
@@ -82,6 +81,7 @@ export default function ProfileDropdown() {
 
   useLayoutEffect(() => {
     if (!open || !isMobile) return;
+
     const btn = btnRef.current;
     if (!btn) return;
 
@@ -89,7 +89,6 @@ export default function ProfileDropdown() {
     const width = 240; // same as w-60
     const padding = 12;
 
-    // right aligned to button, but keep inside viewport
     const right = Math.max(padding, window.innerWidth - (rect.right + padding));
     const top = rect.bottom + 12;
 
@@ -102,7 +101,6 @@ export default function ProfileDropdown() {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.95 }}
       transition={{ duration: 0.25 }}
-      // ✅ نفس ستايلك بالظبط
       className="w-60 rounded-2xl
                  bg-white/5 backdrop-blur-2xl
                  border border-white/10
@@ -111,7 +109,7 @@ export default function ProfileDropdown() {
     >
       <div className="text-xs text-gray-500 px-2">Logged in as</div>
 
-      <div className="px-2 pb-3 text-orange-500 font-semibold tracking-wide border-b border-white/10">
+      <div className="px-2 pb-3 text-orange-500 font-semibold tracking-wide border-b border-white/10 break-words">
         {username}
       </div>
 
@@ -167,7 +165,7 @@ export default function ProfileDropdown() {
         </motion.span>
       </button>
 
-      {/* ✅ Desktop: keep as you had it (no portal) */}
+      {/* ✅ Desktop: no portal */}
       <AnimatePresence>
         {open && !isMobile && (
           <motion.div
@@ -188,7 +186,6 @@ export default function ProfileDropdown() {
           <AnimatePresence>
             {open && (
               <>
-                {/* overlay */}
                 <motion.div
                   className="fixed inset-0 z-[9998] bg-black/60"
                   initial={{ opacity: 0 }}
@@ -197,7 +194,6 @@ export default function ProfileDropdown() {
                   onMouseDown={() => setOpen(false)}
                 />
 
-                {/* dropdown itself */}
                 <motion.div
                   className="fixed z-[9999]"
                   style={{ top: pos.top, right: pos.right }}

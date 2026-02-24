@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { useAuth } from "@features/auth/context/AuthContext";
+import { useAuth } from "@features/auth";
 
 const UNLIMITED_KEY = "fitness_tracker_unlimited_v1";
 const GUEST_KEY = "fitness_tracker_guest_v1";

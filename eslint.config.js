@@ -23,7 +23,9 @@ export default defineConfig([
     "playwright-report",
   ]),
 
-  // ✅ Node/config files (vite/eslint/vitest/playwright) — allow __dirname, process, etc.
+  // ==============================
+  // ✅ Config / Node files
+  // ==============================
   {
     files: [
       "*.config.{js,mjs,cjs}",
@@ -41,16 +43,15 @@ export default defineConfig([
       },
     },
     rules: {
-      // ما نضيّعش وقتنا في ترتيب imports لملفات config
       "import/order": "off",
-      // ومش محتاجين resolver هنا
       "import/no-unresolved": "off",
-      // لو eslint لقط console في configs
       "no-console": "off",
     },
   },
 
-  // ✅ App code
+  // ==============================
+  // ✅ App Code
+  // ==============================
   {
     files: ["src/**/*.{js,jsx}"],
     extends: [
@@ -72,45 +73,56 @@ export default defineConfig([
         ecmaFeatures: { jsx: true },
       },
     },
+
     settings: {
       react: { version: "detect" },
 
-      // ✅ مهم: resolver للـ aliases بتوع Vite
+      // ✅ Vite aliases resolver
       "import/resolver": {
         alias: {
           map: [
-             ["@", "./src"],
-             ["@app", "./src/app"],
-             ["@features", "./src/features"],
-             ["@shared", "./src/shared"], 
-             ["@data", "./src/data"],
-             ["@domain", "./src/domain"],
+            ["@", "./src"],
+            ["@app", "./src/app"],
+            ["@features", "./src/features"],
+            ["@shared", "./src/shared"],
+            ["@data", "./src/data"],
+            ["@domain", "./src/domain"],
           ],
           extensions: [".js", ".jsx", ".json", ".png", ".jpg", ".jpeg", ".svg"],
         },
         node: true,
       },
     },
+
     plugins: {
       "unused-imports": unusedImports,
     },
+
     rules: {
-      // تنظيف imports
+      // ==============================
+      // Clean Code
+      // ==============================
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
 
+      // ==============================
       // React
+      // ==============================
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+      "react-refresh/only-export-components": "warn",
 
+      // ==============================
       // Imports
+      // ==============================
       "import/no-unresolved": [
         "error",
         {
           ignore: ["\\.png$", "\\.jpg$", "\\.jpeg$", "\\.svg$"],
         },
       ],
+
       "import/order": [
         "warn",
         {
@@ -119,16 +131,58 @@ export default defineConfig([
         },
       ],
 
-      // Promises
-      // لو حابب تشغّلها بعدين OK، لكن دلوقتي خليها off زي ما عملت
       "promise/param-names": "off",
 
-      // React Refresh rule ساعات بيزعّق في Context files (هنعالجها ببلوك مخصوص تحت)
-      "react-refresh/only-export-components": "warn",
+      // ==============================
+      // 🚀 Architecture Rules
+      // ==============================
+
+      // ❌ منع feature → feature مباشرة
+      "no-restricted-imports": [
+        "error",
+        {
+         patterns: [
+  {
+    group: [
+      "@features/*/*",
+      "@features/*/*/*",
+      "@features/*/*/*/*",
+      "../features/*/*",
+      "../../features/*/*",
+    ],
+    message:
+      "Do not import feature internals. Import from the feature public API (e.g. @features/auth).",
+  },
+],
+        },
+      ],
+
+      // ❌ shared لازم يبقى مستقل
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            {
+              target: "./src/shared",
+              from: ["./src/app", "./src/features"],
+              message:
+                "Shared layer must stay independent. Do not import app/features into shared.",
+            },
+            {
+              target: "./src/data",
+              from: ["./src/app", "./src/features", "./src/shared"],
+              message:
+                "Data layer is infrastructure only. Do not import UI layers into data.",
+            },
+          ],
+        },
+      ],
     },
   },
 
-  // ✅ Context files (غالبًا بتكسر react-refresh/only-export-components)
+  // ==============================
+  // ✅ Context override
+  // ==============================
   {
     files: ["src/**/context/**/*.{js,jsx}"],
     rules: {
@@ -136,7 +190,9 @@ export default defineConfig([
     },
   },
 
-  // ✅ Tests & e2e
+  // ==============================
+  // ✅ Tests / E2E
+  // ==============================
   {
     files: ["**/*.{test,spec}.{js,jsx}", "e2e/**/*.{js,jsx}"],
     languageOptions: {
